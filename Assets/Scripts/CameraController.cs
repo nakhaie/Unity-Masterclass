@@ -10,7 +10,13 @@ public class CameraController : MonoBehaviour
     public Transform playerBody;
     private float xRotation = 0;
 
-
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
+    
     void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
