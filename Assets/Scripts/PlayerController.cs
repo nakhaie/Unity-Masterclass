@@ -4,8 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    public delegate void LookAtItem(string itemName);
-    public event LookAtItem PlayerLookAtItem;
+    public delegate void StringValue(string strValue);
+    public event StringValue PlayerLookAtItem;
+    public event StringValue PlayerItemDetail;
     
     public float Speed = 12;
     public float Gravity = -9.81f;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _velocity;
     private bool _isGround;
+    private bool _lockLocomotion = false;
     
     // Start is called before the first frame update
     private void Awake()
@@ -34,14 +36,19 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Look();
-        Locomotion();
+        
+        if (!_lockLocomotion)
+        {
+            Locomotion();
+        }
     }
 
     private void Look()
     {
         Ray ray = Camera.main.ViewportPointToRay(Vector2.one / 2.0f);
 
-        string item = String.Empty;
+        string itemName = String.Empty;
+        string itemDetail = String.Empty;
         
         if (Physics.Raycast(ray, out RaycastHit hit, InteractionDistance,InteractionMask))
         {
@@ -50,15 +57,23 @@ public class PlayerController : MonoBehaviour
                 case "Note":
 
                     NoteController note = hit.collider.GetComponent<NoteController>();
-                    item = note.itemName;
-
+                    itemName = note.itemName;
+                    itemDetail = note.itemDetail;
                     break;
+            }
+
+            if (itemDetail != string.Empty && Input.GetMouseButtonDown(0))
+            {
+                if (PlayerItemDetail != null)
+                {
+                    PlayerItemDetail(itemDetail);
+                }
             }
         }
         
         if (PlayerLookAtItem != null)
         {
-            PlayerLookAtItem(item);
+            PlayerLookAtItem(itemName);
         }
 
     }
@@ -89,6 +104,11 @@ public class PlayerController : MonoBehaviour
         _controller.Move(_velocity * Speed * Time.deltaTime);
     }
 
+    public void SetLockLocomotion(bool isLocked)
+    {
+        _lockLocomotion = isLocked;
+    }
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
