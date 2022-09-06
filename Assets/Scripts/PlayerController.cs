@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public delegate void StringValue(string strValue);
+    public delegate void StringWithDataValue(string strValue, UiController.GameData[] data);
     public event StringValue PlayerLookAtItem;
-    public event StringValue PlayerItemDetail;
+    public event StringWithDataValue PlayerItemDetail;
     
     public float Speed = 12;
     public float Gravity = -9.81f;
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
         string itemName = String.Empty;
         string itemDetail = String.Empty;
+        UiController.GameData[] detailData = new UiController.GameData[0];
         
         if (Physics.Raycast(ray, out RaycastHit hit, InteractionDistance,InteractionMask))
         {
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
                     NoteController note = hit.collider.GetComponent<NoteController>();
                     itemName = note.itemName;
                     itemDetail = note.itemDetail;
+                    detailData = note.GameDataInDetail;
                     break;
             }
 
@@ -66,7 +69,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (PlayerItemDetail != null)
                 {
-                    PlayerItemDetail(itemDetail);
+                    PlayerItemDetail(itemDetail, detailData);
                 }
             }
         }
