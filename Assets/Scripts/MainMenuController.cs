@@ -1,13 +1,30 @@
+using System;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    private string _username;
+    public Toggle Male;
     
+    private string _username;
+    private Singleton _singleton;
+
+    public void Awake()
+    {
+        _singleton = Singleton.Instance;
+
+        if (_singleton.GetUsername() != String.Empty)
+        {
+            LoadGame();
+        }
+    }
+
     public void Submit()
     {
-        PlayerPrefs.SetString("username", _username);
+        _singleton.SetUsername(_username);
+        _singleton.SetGender(Male.isOn ? Singleton.EGender.Male : Singleton.EGender.Female);
+        
         LoadGame();
     }
 

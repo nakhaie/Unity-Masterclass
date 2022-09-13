@@ -29,16 +29,18 @@ public class UiController : MonoBehaviour
     private string _username;
 
     private Panel _curPanel;
+    private Singleton _singleton;
     
     private void Awake()
     {
         _player = FindObjectOfType<PlayerController>();
         _camera = Camera.main.GetComponent<CameraController>();
+        _singleton = Singleton.Instance;
         
         _player.PlayerLookAtItem += OnPlayerLookAtItem;
         _player.PlayerItemDetail += OnPlayerItemDetail;
 
-        _username = PlayerPrefs.GetString("username", "player");
+        _username = _singleton.GetFullname();
 
         SetPanel(Panel.Normal);
         _player.SetLockLocomotion(false);
