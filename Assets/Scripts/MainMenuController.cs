@@ -6,20 +6,36 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     public Toggle Male;
-    
+
+    public GameObject MainMenu;
+    public GameObject NamingMenu;
+
+    public Button Continue;
+        
     private string _username;
     private Singleton _singleton;
 
     public void Awake()
     {
         _singleton = Singleton.Instance;
-
-        if (_singleton.GetUsername() != String.Empty)
-        {
-            LoadGame();
-        }
+        
+        Continue.interactable = (_singleton.GetUsername() != String.Empty);
+        Continue.onClick.AddListener(OnClickContinue);
     }
 
+    public void OnClickNewGame()
+    {
+        MainMenu.SetActive(false);
+        NamingMenu.SetActive(true);
+        _singleton.RemoveAll();
+    }
+    
+    private void OnClickContinue()
+    {
+        LoadGame();
+    }
+    
+    
     public void Submit()
     {
         _singleton.SetUsername(_username);

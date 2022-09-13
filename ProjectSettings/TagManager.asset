@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Note
+  - Lock
   layers:
   - Default
   - TransparentFX
