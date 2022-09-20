@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -26,7 +27,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 _velocity;
     private bool _isGround;
     private bool _lockLocomotion = false;
-    
+
+    private List<Item> _inventory = new List<Item>();
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -72,7 +75,8 @@ public class PlayerController : MonoBehaviour
                         break;
                     case Item.InteractType.Take:
 
-                        
+                        _inventory.Add(item);
+                        item.gameObject.SetActive(false);
                         
                         break;
                 }

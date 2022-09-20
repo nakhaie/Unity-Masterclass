@@ -10,7 +10,8 @@ public abstract class Item : MonoBehaviour
     public enum InteractType
     {
         Read = 0,
-        Take = 1
+        Take = 1,
+        Condition = 2
     }
     
     public InteractType ItemInteractType;
@@ -20,5 +21,10 @@ public abstract class Item : MonoBehaviour
     public string ItemDetail;
 
     public abstract string GetDetail();
+
+    public virtual void ConditionDone()
+    {
+        Debug.Log("Done!");
+    }
 }
 
