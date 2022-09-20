@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +10,6 @@ public class UiController : MonoBehaviour
         Pause = 2
     }
 
-    public enum GameData
-    {
-        PlayerName
-    }
-    
     [Header("Panels")]
     public GameObject InteractPanel;
     public GameObject DetailPanel;
@@ -65,32 +59,13 @@ public class UiController : MonoBehaviour
         }
     }
 
-    private void OnPlayerItemDetail(string itemDetail, GameData[] data)
+    private void OnPlayerItemDetail(string itemDetail)
     {
         SetPanel(Panel.Detail);
         _player.SetLockLocomotion(true);
         _camera.SetLockMotion(true);
 
-        if (data.Length > 0)
-        {
-            string[] dataTarget = new string[data.Length];
-
-            for (int i = 0; i < dataTarget.Length; i++)
-            {
-                switch (data[i])
-                {
-                    case GameData.PlayerName:
-                        dataTarget[i] = _username;
-                        break;
-                }
-            }
-
-            ItemDetailField.text = string.Format(itemDetail, dataTarget);
-        }
-        else
-        {
-            ItemDetailField.text = itemDetail;
-        }
+        ItemDetailField.text = itemDetail;
     }
 
     private void OnPlayerLookAtItem(string itemName)

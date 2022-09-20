@@ -1810,7 +1810,7 @@ GameObject:
   - component: {fileID: 1155443559}
   m_Layer: 7
   m_Name: Note
-  m_TagString: Note
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1904,11 +1904,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138321e23aaf2eb4dae1c4f344ca40b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Yellow Note
-  GameDataInDetail: 00000000
-  itemDetail: 'Hello {0}
+  ItemInteractType: 0
+  ItemName: Yellow Note
+  ItemDetail: 'Hello {0}
 
-    Welcome to nowhere {0}.'
+    Welcom...'
+  GameDataInDetail: 00000000
 --- !u!1 &1231409529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,7 +2003,7 @@ GameObject:
   - component: {fileID: 1241845756}
   m_Layer: 7
   m_Name: Lock
-  m_TagString: Untagged
+  m_TagString: Lock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3027,7 +3028,7 @@ GameObject:
   - component: {fileID: 1992044200}
   m_Layer: 7
   m_Name: Note (1)
-  m_TagString: Note
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3044,13 +3045,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138321e23aaf2eb4dae1c4f344ca40b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Red Note
+  ItemInteractType: 0
+  ItemName: Red note
+  ItemDetail: You can find the key at the down of the stairs.
   GameDataInDetail: 
-  itemDetail: 'Watch your steps
-
-    ...
-
-'
 --- !u!64 &1992044201
 MeshCollider:
   m_ObjectHideFlags: 0

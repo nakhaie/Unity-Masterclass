@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public delegate void StringValue(string strValue);
-    public delegate void StringWithDataValue(string strValue, UiController.GameData[] data);
+    public delegate void StringWithDataValue(string strValue);
     public event StringValue PlayerLookAtItem;
     public event StringWithDataValue PlayerItemDetail;
     
@@ -50,27 +50,33 @@ public class PlayerController : MonoBehaviour
 
         string itemName = String.Empty;
         string itemDetail = String.Empty;
-        UiController.GameData[] detailData = new UiController.GameData[0];
-        
+
         if (Physics.Raycast(ray, out RaycastHit hit, InteractionDistance,InteractionMask))
         {
-            switch (hit.collider.tag)
-            {
-                case "Note":
+            Item item = hit.collider.GetComponent<Item>();
+            itemName = item.ItemName;
 
-                    NoteController note = hit.collider.GetComponent<NoteController>();
-                    itemName = note.itemName;
-                    itemDetail = note.itemDetail;
-                    detailData = note.GameDataInDetail;
-                    break;
-            }
-
-            if (itemDetail != string.Empty && Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                if (PlayerItemDetail != null)
+                itemDetail = item.GetDetail();
+                
+                switch (item.ItemInteractType)
                 {
-                    PlayerItemDetail(itemDetail, detailData);
+                    case Item.InteractType.Read:
+
+                        if (PlayerItemDetail != null)
+                        {
+                            PlayerItemDetail(itemDetail);
+                        }
+                        
+                        break;
+                    case Item.InteractType.Take:
+
+                        
+                        
+                        break;
                 }
+                
             }
         }
         

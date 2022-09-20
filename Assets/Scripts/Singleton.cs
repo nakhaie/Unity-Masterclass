@@ -34,7 +34,7 @@ public class Singleton
     private const string UsernameKey = "username";
     private const string GenderKey = "gender";
 
-    private PlayerData _data;
+    private PlayerData _data = new PlayerData();
     
     public const string Male = "Mr";
     public const string Female = "Mrs";
