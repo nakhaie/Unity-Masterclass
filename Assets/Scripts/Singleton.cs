@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Singleton
@@ -7,6 +8,7 @@ public class Singleton
     {
         public string Username;
         public EGender Gender;
+        public List<Item> Interacted = new List<Item>();
     }
 
     private static Singleton _instance;
@@ -33,6 +35,8 @@ public class Singleton
 
     private const string UsernameKey = "username";
     private const string GenderKey = "gender";
+    private const string InteractedKey = "inventory";
+    private char SeparatorItem = '#';
 
     private PlayerData _data = new PlayerData();
     
@@ -56,6 +60,33 @@ public class Singleton
         PlayerPrefs.Save();
     }
 
+    public List<Item> LoadInteractData(string levelName, Item[] levelItems)
+    {
+        string InteractedDataStr = PlayerPrefs.GetString($"{InteractedKey}_{levelName}", String.Empty);
+        
+        
+        if (!string.IsNullOrEmpty(InteractedDataStr))
+        {
+            string[] interactedData = InteractedDataStr.Split(SeparatorItem);
+
+            foreach (var item in levelItems)
+            {
+                foreach (var data in interactedData)
+                {
+                    if (item.ItemName == data)
+                    {
+                        AddInteractableItem(item);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        Debug.Log($"_data.Interacted: {_data.Interacted.Count}");
+        
+        return _data.Interacted;
+    }
+    
     public void RemoveAll()
     {
         PlayerPrefs.DeleteAll();
@@ -73,6 +104,25 @@ public class Singleton
         PlayerPrefs.SetInt(GenderKey, (int)gender);
     }
 
+    public void AddInteractableItem(Item item)
+    {
+        _data.Interacted.Add(item);
+    }
+
+    public void SaveInteractedItem(string levelName)
+    {
+        string result = String.Empty;
+
+        foreach (var item in _data.Interacted)
+        {
+            result += $"{item.ItemName}{SeparatorItem}";
+        }
+        
+        PlayerPrefs.SetString($"{InteractedKey}_{levelName}" , result);
+        PlayerPrefs.Save();
+        Debug.Log(result);
+    }
+
     public string GetUsername()
     {
         return _data.Username;
@@ -83,6 +133,11 @@ public class Singleton
         return _data.Gender;
     }
 
+    public List<Item> GetCurInteracted()
+    {
+        return _data.Interacted;
+    }
+    
     public string GetFullname()
     {
         return $"{(_data.Gender == EGender.Male ? Male : Female)}.{GetUsername()}";

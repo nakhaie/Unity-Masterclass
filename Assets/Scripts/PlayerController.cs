@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -29,11 +30,13 @@ public class PlayerController : MonoBehaviour
     private bool _lockLocomotion = false;
 
     private List<Item> _inventory = new List<Item>();
+    private Singleton _singleton;
 
     // Start is called before the first frame update
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _singleton = Singleton.Instance;
     }
 
     // Update is called once per frame
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
                         if (PlayerItemDetail != null)
                         {
                             PlayerItemDetail(itemDetail);
+                            _singleton.AddInteractableItem(item);
                         }
                         
                         break;
@@ -77,10 +81,21 @@ public class PlayerController : MonoBehaviour
 
                         _inventory.Add(item);
                         item.gameObject.SetActive(false);
+                        _singleton.AddInteractableItem(item);
+                        
+                        break;
+                    case Item.InteractType.Condition:
+
+                        if (KeyExist(item.ItemDetail))
+                        {
+                            _singleton.AddInteractableItem(item);
+                            item.ConditionDone();
+                        }
                         
                         break;
                 }
-                
+
+                _singleton.SaveInteractedItem(SceneManager.GetActiveScene().name);
             }
         }
         
@@ -89,6 +104,24 @@ public class PlayerController : MonoBehaviour
             PlayerLookAtItem(itemName);
         }
 
+    }
+
+    private bool KeyExist(string itemDetail)
+    {
+        foreach (var item in _inventory)
+        {
+            if (item.ItemDetail == itemDetail)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void AddToInventory(Item item)
+    {
+        _inventory.Add(item);
     }
     
     private void Locomotion()

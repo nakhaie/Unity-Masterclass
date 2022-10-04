@@ -13,6 +13,6 @@ public class LockController : Item
     
     public override void ConditionDone()
     {
-        
+        door.Open();
     }
 }

@@ -13,6 +13,7 @@ public class UiController : MonoBehaviour
     [Header("Panels")]
     public GameObject InteractPanel;
     public GameObject DetailPanel;
+    public GameObject PausePanel;
     
     [Header("Fields")]
     public Text ItemNameField;
@@ -46,19 +47,58 @@ public class UiController : MonoBehaviour
         switch (_curPanel)
         {
             case Panel.Normal:
-                
+                if (Input.GetButtonDown("Cancel"))
+                {
+                    Pause();
+                }
                 break;
             case Panel.Detail:
                 if (Input.GetButtonDown("Cancel"))
                 {
-                    SetPanel(Panel.Normal);
-                    _player.SetLockLocomotion(false);
-                    _camera.SetLockMotion(false);
+                    Detail();
                 }
                 break;
+            case Panel.Pause:
+                if (Input.GetButtonDown("Cancel"))
+                {
+                    Resume();
+                }
+                break;
+            
         }
     }
 
+    public void Resume()
+    {
+        SetPanel(Panel.Normal);
+        Time.timeScale = 1;
+                    
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void Pause()
+    {
+        SetPanel(Panel.Pause);
+                    
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+                    
+        Time.timeScale = 0;
+    }
+
+    public void Detail()
+    {
+        SetPanel(Panel.Normal);
+        _player.SetLockLocomotion(false);
+        _camera.SetLockMotion(false);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+    
     private void OnPlayerItemDetail(string itemDetail)
     {
         SetPanel(Panel.Detail);
@@ -79,5 +119,6 @@ public class UiController : MonoBehaviour
 
         InteractPanel.SetActive(_curPanel == Panel.Normal);
         DetailPanel.SetActive(_curPanel == Panel.Detail);
+        PausePanel.SetActive(_curPanel == Panel.Pause);
     }
 }
